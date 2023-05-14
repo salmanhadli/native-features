@@ -7,6 +7,7 @@ import {
 import { useState } from "react";
 import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../constants/colors";
+import OutlinedButton from "../UI/OutlinedButton";
 
 export default () => {
   const [cameraPermissionInformation, requestPermission] =
@@ -56,7 +57,9 @@ export default () => {
       <View style={styles.imagePreview}>
         <View>{imagePreview}</View>
       </View>
-      <Button title="take image" onPress={takeImageHandler} />
+      <OutlinedButton onPress={takeImageHandler} icon="camera">
+        Take Image
+      </OutlinedButton>
     </View>
   );
 };
