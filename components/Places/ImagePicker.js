@@ -2,10 +2,12 @@ import {
   launchCameraAsync,
   requestCameraPermissionsAsync,
   useCameraPermissions,
+  MediaTypeOptions,
   PermissionStatus,
+  launchImageLibraryAsync,
 } from "expo-image-picker";
 import { useState } from "react";
-import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../constants/colors";
 import OutlinedButton from "../UI/OutlinedButton";
 
@@ -36,10 +38,13 @@ export default () => {
       const hasPermission = await verifyPermissions();
       if (!hasPermission) return;
       const image = await launchCameraAsync({
+        mediaTypes: MediaTypeOptions.Images,
+        allowsMultipleSelection: false,
         allowsEditing: true,
         aspect: [16, 9],
         quality: 0.5,
       });
+    //   const uri = assets[0].uri;
       console.log(image);
       setPickedImage(image.uri);
     } catch (e) {
@@ -73,6 +78,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.primary100,
     borderRadius: 4,
+    overflow: 'hidden'
   },
   image: {
     width: "100%",
