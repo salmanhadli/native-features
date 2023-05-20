@@ -33,7 +33,7 @@ export default () => {
 
     return true;
   }
-  async function takeImageHandler() {
+  async function takeImageHandler({ onTakeImage }) {
     try {
       const hasPermission = await verifyPermissions();
       if (!hasPermission) return;
@@ -44,9 +44,9 @@ export default () => {
         aspect: [16, 9],
         quality: 0.5,
       });
-    //   const uri = assets[0].uri;
-      console.log(image);
+
       setPickedImage(image.uri);
+      onTakeImage(image.uri);
     } catch (e) {
       console.log(e);
     }
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.primary100,
     borderRadius: 4,
-    overflow: 'hidden'
+    overflow: "hidden",
   },
   image: {
     width: "100%",

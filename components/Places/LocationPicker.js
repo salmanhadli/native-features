@@ -6,14 +6,14 @@ import {
   getCurrentPositionAsync,
 } from "expo-location";
 import { useEffect, useState } from "react";
-import { getMapPreview } from "../../util/location";
+import { getAddress, getMapPreview } from "../../util/location";
 import {
   useIsFocused,
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
 
-export default () => {
+export default ({ onPickLocation }) => {
   const [pickedLocation, setPickedLocation] = useState();
   const isFocused = useIsFocused();
   const navigation = useNavigation();
@@ -25,11 +25,22 @@ export default () => {
         lat: route.params.pickedLat,
         lng: route.params.pickedLng,
       };
-      if (mapPickedLocation) {
-        setPickedLocation(mapPickedLocation);
-      }
+      setPickedLocation(mapPickedLocation);
     }
   }, [route, isFocused]);
+
+  useEffect(() => {
+    async function handleLocation() {
+      if (pickedLocation) {
+        const address = await getAddress(
+          pickedLocation.lat,
+          pickedLocation.lng
+        );
+        onPickLocation({ ...pickedLocation, address });
+      }
+    }
+    handleLocation();
+  }, [pickedLocation, onPickLocation]);
 
   async function getLocationHandler() {
     let { status } = await requestForegroundPermissionsAsync();
