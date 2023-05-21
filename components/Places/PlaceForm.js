@@ -26,13 +26,13 @@ export default ({ onCreatePlace }) => {
   function savePlaceHandler() {
     // const placeData = new Place(title, selectedImage, pickedLocation);
     onCreatePlace({
-      title: "place Name",
+      title: title || "place Name",
       imageUri:
-        "https://images.unsplash.com/photo-1682687220640-9d3b11ca30e5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHwxfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60",
+        "https://images.unsplash.com/photo-1684364971476-490f5b033aed?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHx8&auto=format&fit=crop&w=500&q=60",
       address: "address dummy",
       location: {
-        lat: 123,
-        lng: 456,
+        lat: pickedLocation?.lat || 123,
+        lng: pickedLocation?.lng || 456,
       },
     });
   }

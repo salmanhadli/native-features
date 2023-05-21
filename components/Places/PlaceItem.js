@@ -4,13 +4,13 @@ import { Colors } from "../../constants/colors";
 export default ({ place, onSelect }) => {
   return (
     <Pressable
-      styles={({ pressed }) => [styles.item, pressed && styles.pressed]}
-      onPress={onSelect}
+      style={({ pressed }) => [styles.item, pressed && styles.pressed]}
+      onPress={onSelect.bind(this, place.id)}
     >
-      <Image styles={styles.image} source={{ uri: place.imageUri }} />
-      <View styles={styles.info}>
-        <Text styles={styles.title}>{place.title}</Text>
-        <Text styles={styles.address}>{place.address}</Text>
+      <Image style={styles.image} source={{ uri: place?.imageUri }} />
+      <View style={styles.info}>
+        <Text style={styles.title}>{place?.title}</Text>
+        <Text style={styles.address}>{place?.address}</Text>
       </View>
     </Pressable>
   );

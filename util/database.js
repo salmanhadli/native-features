@@ -87,3 +87,30 @@ export function fetchPlaces() {
   });
   return promise;
 }
+
+export function fetchPlaceDetails(id) {
+  const promise = new Promise((resolve, reject) => {
+    database.transaction((tx) => {
+      tx.executeSql(
+        "SELECT * from places WHERE id = ?",
+        [id],
+        (_, result) => {
+          const { rows } = result;
+          const { _array } = rows;
+          const dpPlace = _array[0];
+          const place = new Place(
+            dpPlace.title,
+            dpPlace.imageUri,
+            { lat: dpPlace.lat, lng: dpPlace.lng, address: dpPlace.address },
+            dpPlace.id
+          );
+          resolve(place);
+        },
+        (_, error) => {
+          reject(error);
+        }
+      );
+    });
+  });
+  return promise;
+}

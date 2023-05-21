@@ -7,12 +7,21 @@ import {
 } from "expo-location";
 import IconButton from "../components/UI/IconButton";
 
-export default ({ navigation }) => {
+export default ({ navigation, route }) => {
   const [region, setRegion] = useState();
   const [selectedLocation, setSelectedLocation] = useState();
+
+  let intialLocation;
+  if (route.params.initialLat && route.params.initialLng) {
+    intialLocation = {
+      lat: route.params.initialLat,
+      lng: route.params.initialLng,
+    };
+  }
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: ({ tintColor }) => {
+        if (intialLocation) return;
         return (
           <IconButton
             icon="save"
@@ -40,28 +49,43 @@ export default ({ navigation }) => {
         lng: location.coords.longitude,
       };
     }
-    getLocation()
-      .then((location) => {
-        const region = {
-          latitude: location.lat,
-          longitude: location.lng,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        };
-        setRegion(region);
-      })
-      .catch(() => {
-        const region = {
-          latitude: 15.350304167845115,
-          longitude: 75.14973487704992,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        };
-        setRegion(region);
+    if (intialLocation) {
+      setSelectedLocation({
+        latitude: intialLocation.lat,
+        longitude: intialLocation.lng,
       });
+      // const region = {
+      //   latitude: intialLocation.lat,
+      //   longitude: intialLocation.lng,
+      //   latitudeDelta: 0.0922,
+      //   longitudeDelta: 0.0421,
+      // };
+      // setRegion(region);
+    } else {
+      getLocation()
+        .then((location) => {
+          const region = {
+            latitude: location.lat,
+            longitude: location.lng,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          };
+          setRegion(region);
+        })
+        .catch(() => {
+          const region = {
+            latitude: 15.350304167845115,
+            longitude: 75.14973487704992,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          };
+          setRegion(region);
+        });
+    }
   }, [navigation, savePickedLocationHandler]);
 
   function selectLocationHandler(event) {
+    if (intialLocation) return;
     const latitude = event.nativeEvent.coordinate.latitude;
     const longitude = event.nativeEvent.coordinate.longitude;
     setSelectedLocation({
